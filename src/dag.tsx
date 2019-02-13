@@ -42,6 +42,7 @@ export interface IDAGProps {
   connections: IConnectionParams[];
   eventListeners?: IEventProps;
   jsPlumbSettings?: object;
+  onUpdatePosition: ({ uuid, position }: {uuid: string, position: number[]}) => void;
   onChange?: (changeParams: IChangeProps) => void;
   registerTypes?: IRegisterTypesProps;
   nodes: INode[];
@@ -228,8 +229,16 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
     this.state.jsPlumbInstance.addEndpoint(element, params, referenceParams);
   };
 
+  public handleDragStop = (e: any, id: string) => {
+    // tslint:disable-next-line
+    console.log('handleDragStop', e, id, this.props);
+    this.props.onUpdatePosition({ uuid: id, position: e.finalPos });
+  };
+
   public makeNodeDraggable = (id: string) => {
-    this.state.jsPlumbInstance.draggable(id);
+    this.state.jsPlumbInstance.draggable(id, {
+      stop: (e: any) => this.handleDragStop(e, id),
+    });
   };
 
   public getNewConnectionObj = (
