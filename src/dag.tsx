@@ -196,6 +196,7 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
   };
 
   public makeConnections = () => {
+    // tslint:disable-next-line
     console.log('this.state.jsPlumbInstance = ', this.state.jsPlumbInstance);
     if (!this.state.jsPlumbInstance) {
       return;
@@ -206,6 +207,7 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
         connObj,
         this.props.connectionEncoders
       );
+      // tslint:disable-next-line
       console.log('newConnObj = ', newConnObj);
       if (
         (this.state.jsPlumbInstance.getEndpoints(newConnObj.sourceId).length ||
@@ -215,6 +217,7 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
       ) {
         newConnObj.source = newConnObj.sourceId;
         newConnObj.target = newConnObj.targetId;
+        // tslint:disable-next-line
         console.log('newConnObj ==== ', newConnObj);
         this.state.jsPlumbInstance.connect(newConnObj);
       }
@@ -333,6 +336,7 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
   }
 
   public render() {
+    // tslint:disable-next-line
     console.log('------');
     return (
       <div
