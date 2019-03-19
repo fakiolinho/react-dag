@@ -196,7 +196,7 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
   };
 
   public makeConnections = () => {
-    console.log('this.state.jsPlumbInstance = ', this.state.jsPlumbInstance)
+    console.log('this.state.jsPlumbInstance = ', this.state.jsPlumbInstance);
     if (!this.state.jsPlumbInstance) {
       return;
     }
@@ -333,6 +333,7 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
   }
 
   public render() {
+    console.log('------');
     return (
       <div
         key={DAG_CONTAINER_ID}
