@@ -1,4 +1,3 @@
-// tslint:disable
 import "jsplumb";
 import * as Models from "./models";
 import * as React from "react";
