@@ -1,3 +1,4 @@
+// tslint:disable
 import "jsplumb";
 import * as Models from "./models";
 import * as React from "react";
@@ -130,6 +131,14 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
     const { nodes, zoom, connections } = nextProps;
     this.setState({ nodes, zoom, connections });
     this.state.jsPlumbInstance.setZoom(zoom, true);
+
+    if (!connections || connections.length === 0) {
+      this.state.jsPlumbInstance.deleteEveryConnection();
+    }
+
+    if (!nodes || nodes.length === 0) {
+      this.state.jsPlumbInstance.deleteEveryEndpoint();
+    }
   }
 
   public componentDidMount() {
@@ -196,8 +205,6 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
   };
 
   public makeConnections = () => {
-    // tslint:disable-next-line
-    console.log('this.state.jsPlumbInstance = ', this.state.jsPlumbInstance);
     if (!this.state.jsPlumbInstance) {
       return;
     }
@@ -207,8 +214,6 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
         connObj,
         this.props.connectionEncoders
       );
-      // tslint:disable-next-line
-      console.log('newConnObj = ', newConnObj);
       if (
         (this.state.jsPlumbInstance.getEndpoints(newConnObj.sourceId).length ||
           this.state.jsPlumbInstance.isSource(newConnObj.sourceId)) &&
@@ -217,8 +222,6 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
       ) {
         newConnObj.source = newConnObj.sourceId;
         newConnObj.target = newConnObj.targetId;
-        // tslint:disable-next-line
-        console.log('newConnObj ==== ', newConnObj);
         this.state.jsPlumbInstance.connect(newConnObj);
       }
     });
@@ -236,8 +239,6 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
   };
 
   public handleDragStop = (e: any, id: string) => {
-    // tslint:disable-next-line
-    console.log('handleDragStop', e, id, this.props);
     this.props.onUpdatePosition({ uuid: id, position: e.finalPos });
   };
 
@@ -314,7 +315,6 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
     if (!this.state.isJsPlumbInstanceCreated) {
       return "...loading";
     }
-
     return React.Children.map(this.props.children, child => {
       if (
         typeof child === "string" ||
@@ -324,6 +324,7 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
       ) {
         return child;
       }
+
       return React.cloneElement(child as React.ReactElement<DefaultNode>, {
         ...child.props,
         config: this.getNodeConfig(child.props.id),
@@ -336,8 +337,6 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
   }
 
   public render() {
-    // tslint:disable-next-line
-    console.log('------');
     return (
       <div
         key={DAG_CONTAINER_ID}
