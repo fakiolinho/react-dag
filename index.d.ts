@@ -80,7 +80,7 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
       makeTargetParams,
     }: IInitNodeProps
   ) => void;
-  makeConnections: () => void;
+  makeConnections: (connections: any) => void;
   addEndpoint: (
     element: HTMLElement | null,
     params?: Object,

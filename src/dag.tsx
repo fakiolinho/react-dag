@@ -3,6 +3,7 @@ import * as Models from "./models";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as uuidv4 from "uuid/v4";
+
 import DefaultNode, { INodeProps } from "./components/DefaultNode";
 import ReactPanZoom from "@ajainarayanan/react-pan-zoom";
 import {
@@ -131,12 +132,12 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
     this.setState({ nodes, zoom, connections });
     this.state.jsPlumbInstance.setZoom(zoom, true);
 
-    if (!connections || connections.length === 0) {
-      this.state.jsPlumbInstance.deleteEveryConnection();
-    }
-
     if (!nodes || nodes.length === 0) {
       this.state.jsPlumbInstance.deleteEveryEndpoint();
+    }
+
+    if (this.props.connections.length !== connections.length) {
+      this.makeConnections(connections);
     }
   }
 
@@ -200,15 +201,15 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
       this.state.jsPlumbInstance.makeTarget(nodeId, makeTargetParams);
     }
     this.makeNodeDraggable(nodeId);
-    this.makeConnections();
+    this.makeConnections(this.props.connections);
   };
 
-  public makeConnections = () => {
+  public makeConnections = (connections: any) => {
     if (!this.state.jsPlumbInstance) {
       return;
     }
     this.state.jsPlumbInstance.deleteEveryConnection();
-    this.props.connections.forEach(connObj => {
+    connections.forEach((connObj: any) => {
       const newConnObj = this.getNewConnectionObj(
         connObj,
         this.props.connectionEncoders
@@ -294,6 +295,7 @@ export default class DAG extends React.Component<IDAGProps, IDAGState> {
       detachedConnObj,
       this.props.connectionDecoders
     );
+
     this.removeConnection(newConnObj);
     this.state.jsPlumbInstance.repaintEverything();
   };
